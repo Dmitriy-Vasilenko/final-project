@@ -1,7 +1,126 @@
-import React from 'react'
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useApi } from '../../hooks/useApi';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+import FavoriteContext from '../../contexts/favoriteContext';
+import { Paper, Card, CardHeader, CardContent, CardMedia, CardActions, Typography, Avatar, IconButton, Badge, Button, Grid, Chip, Stack } from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
+import dayjs from 'dayjs';
 
-export const Post = () => {
+export const Post = ({ post, isItFavorite }) => {
+  const api = useApi();
+  const navigate = useNavigate();
+  const { writeLS, removeLS } = useLocalStorage();
+  const { setFavorite } = useContext(FavoriteContext);
+  const [badgeContent, setBadgeContent] = useState(post.likes.length);
+  const createdDate = dayjs(post.created_at).format('D MMMM YYYY');
+
+  const arrayTags = post.tags.filter(tag => {
+    return (tag !== '' && tag != 'undefined' && tag !== ' ') 
+  }); 
+  
+  const addFavorite = () => { 
+    writeLS('favorite', post._id);
+    setFavorite(prevState => [...prevState, post._id]);
+
+    api.addLike(post._id)
+    .then(addedLike => {
+      return setBadgeContent(addedLike.likes.length);
+    })
+    .catch(() => alert('Не удалось поставить лайк'))
+  }
+
+  const removeFavorite = () => {
+    removeLS('favorite', post._id);
+    setFavorite(prevState => prevState.filter(id => post._id !== id));
+
+    api.deleteLike(post._id)
+    .then(deletedLike => {
+      return setBadgeContent(deletedLike.likes.length)
+    })
+    .catch(() => alert('Не удалось снять лайк'))
+  }
+
   return (
-    <div>Post</div>
+    <Paper elevation={4} sx={{maxWidth: 400, height: '100%'}}>
+      <Card sx={{ maxWidth: 400, p: 1, height: '100%' }}>
+        <CardHeader 
+        sx={{display: 'flex', alignItems: 'flex-start'}}
+        avatar={
+          <Avatar aria-label="avatar" src={post.author.avatar} sx={{width: 70, height: 70}}/>
+        }
+        title={
+          <Typography color='primary.dark' variant='h6' component='h3' sx={{fontSize: '18px'}}>
+            {post.title}
+          </Typography>
+        }
+        subheader={
+          <Typography color='primary.light' variant='subtitle2' paragraph sx={{fontSize:'13px'}}>
+            {createdDate}
+          </Typography>
+        }
+        />       
+        <CardMedia
+          component='img'
+          height='200'
+          image={post.image}
+          alt='Упс! Картинка не загрузилась'
+        />
+
+        <CardContent>    
+            <Typography variant='body2' color='text.secondary' sx={{mb: 4}}>
+              {post.text}
+            </Typography>
+            <Stack direction='row' spacing={1}>
+            {
+            arrayTags.map((tag, i) => {
+                return <Chip 
+                    key={i} 
+                    label={tag} 
+                    variant='outlined' 
+                    size='small' 
+                    color='primary'
+                    sx={{
+                    fontSize:'12px',
+                    borderRadius: '3px',
+                    lineHeight: '100%'
+                    }} 
+                />
+            })
+            }
+        </Stack>
+        </CardContent>
+        <CardActions>
+        <Grid container direction='row' justifyContent='space-between'>
+          <Grid item>
+          {
+            isItFavorite ? 
+              <IconButton aria-label="add to favorites" onClick={removeFavorite}>
+              <Badge badgeContent={badgeContent} color='primary' showZero>
+                <FavoriteIcon color='secondary' />
+              </Badge>
+              </IconButton> :
+              <IconButton aria-label="add to favorites" onClick={addFavorite}>
+              <Badge badgeContent={badgeContent} color='primary' showZero>
+                <FavoriteBorderIcon color='secondary' />
+              </Badge>
+              </IconButton>
+          }
+          
+          <IconButton aria-label='comments'>
+            <Badge badgeContent={post.comments.length} color='primary' showZero sx={{ml: 2}}>
+              <ChatOutlinedIcon color='secondary' />
+            </Badge>
+          </IconButton>
+          </Grid>
+          <Grid item>
+            <Button onClick={() => navigate('post')}>Перейти</Button>
+          </Grid>
+        </Grid>
+        </CardActions>
+      </Card>
+    </Paper>
   )
 }
