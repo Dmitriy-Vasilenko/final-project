@@ -24,12 +24,12 @@ export const Header = () => {
             justifyContent: 'flex-end',
             flexGrow: 1
           }}>
-            {user && <Chip 
-              avatar={<Avatar alt='avatar' src={user.avatar}/>}
-              label={user.name}
+          <Chip 
+              avatar={<Avatar alt='avatar' src=''/>}
+              label='user'
               clickable={true}
               sx={{marginRight: 4}}
-            />}
+          />
           </Box>
         </Toolbar>
       </Container>
