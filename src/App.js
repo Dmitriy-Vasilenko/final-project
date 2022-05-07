@@ -43,7 +43,7 @@ export const App = () => {
               />
             }>
             </Route>
-            <Route path='post' element={<PostCard />} />
+            <Route path='post/:postId' element={<PostCard />} />
           </Routes>
           <Footer/>
         </div>

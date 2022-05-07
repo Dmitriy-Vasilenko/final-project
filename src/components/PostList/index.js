@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PostsContext from '../../contexts/postsContext';
 import FavoriteContext from '../../contexts/favoriteContext';
 import { Post } from '../Post';
-import { Pagination, PaginationItem, Grid, Stack, Container, Box } from '@mui/material';
+import { Pagination, PaginationItem, Grid, Stack, Container } from '@mui/material';
 
 export const PostList = ({page, setPage, quantityPages}) => {
   const { favorite } = useContext(FavoriteContext);
@@ -39,7 +39,8 @@ export const PostList = ({page, setPage, quantityPages}) => {
         <Stack spacing={2} >
           <Pagination 
             count={quantityPages} 
-            color='primary' 
+            color='primary'
+            shape='rounded'
             page={page} 
             onChange={handleChangePage}
             renderItem={(item) => (

@@ -61,7 +61,7 @@ class Api {
     }
     
     addPost(post) {
-        return fetch(this._url + '/posts', {
+        return fetch(`${this._url}/posts`, {
             method: 'POST',
             headers: {
                 authorization: `Bearer ${this._token}`,
