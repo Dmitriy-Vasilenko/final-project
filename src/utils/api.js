@@ -8,14 +8,14 @@ class Api {
         this._token = token;
     }
     
-    /* getPosts() {
+    getPostsTotal() {
         return fetch(`${this._url}/posts`, {
             headers: {
                 authorization: `Bearer ${this._token}`
             }
         }).then(onResponse)
         .catch(err => alert(err))
-    } */
+    }
 
     getPosts(pageNumber) {
         return fetch(`${this._url}/posts/paginate?page=${pageNumber}&limit=12`, {

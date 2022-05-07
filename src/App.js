@@ -14,9 +14,15 @@ export const App = () => {
   const api = useApi();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState(null);
-  const [favorite, setFavorite] = useState(JSON.parse(localStorage.getItem('favorite')) || [])
-  const [page, setPage] = useState(JSON.parse(localStorage.getItem('page')) || 1)
+  const [postsTotal, setPostsTotal] = useState(null);
+  const [favorite, setFavorite] = useState(JSON.parse(localStorage.getItem('favorite')) || []);
+  const [page, setPage] = useState(JSON.parse(localStorage.getItem('page')) || 1);
   const [quantityPages, setQuantityPages] = useState(0);
+
+  useEffect(() => {
+    api.getPostsTotal()
+    .then(data => setPostsTotal(data.length))
+  }, [])
 
   useEffect(() => {
     api.getPosts(page)
@@ -25,12 +31,11 @@ export const App = () => {
       setQuantityPages(Math.ceil(post.total/12))
     })
     .catch(err => alert(err))
-    }, [page, quantityPages, favorite]) 
-
+    }, [page, quantityPages, favorite, postsTotal]) 
 
   return (
     <UserContext.Provider value={{user, setUser}}>
-      <PostsContext.Provider value={{posts, setPosts}}>
+      <PostsContext.Provider value={{posts, setPosts, postsTotal, setPostsTotal}}>
         <FavoriteContext.Provider value={{favorite, setFavorite}}>
           <div className='app'>
           <Header/>
