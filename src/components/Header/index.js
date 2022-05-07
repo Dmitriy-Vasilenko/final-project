@@ -1,10 +1,28 @@
 import React, {useContext} from 'react';
+import { useNavigate } from 'react-router-dom';
 import UserContext from '../../contexts/userContext';
-import { AppBar, Container, Toolbar, Typography, Box, Avatar, Chip } from '@mui/material';
+import { AppBar, Container, Toolbar, Typography, Box, Avatar, Chip, Stack } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
+import FormModalContext from '../../contexts/formModalContext';
 import { Logo } from '../Logo';
 
 export const Header = () => {
+  const navigate = useNavigate();
+  const navigateToEditPage = () => {
+    navigate('user/edit');
+  }
   const {user} = useContext(UserContext);
+  const { setModalFormState } = useContext(FormModalContext);
+
+  const deleteUser = () => {
+    localStorage.removeItem('token');
+    setModalFormState(() => {
+      return {
+          isOpen: true,
+          msg: '',
+      };
+  });
+  };
 
   return (
     <AppBar position='sticky'>
@@ -24,15 +42,14 @@ export const Header = () => {
             justifyContent: 'flex-end',
             flexGrow: 1
           }}>
-          <Chip 
-              avatar={<Avatar alt='avatar' src=''/>}
-              label='user'
-              clickable={true}
-              sx={{marginRight: 4}}
-          />
           </Box>
+          <Stack direction="row" spacing={2}> 
+                      <Chip avatar={<Avatar alt="Natacha" src = {user?.avatar} />}  label={user?.name} onClick ={navigateToEditPage}  variant="outlined" />
+                      <Chip icon={<LogoutIcon />}  label='Выход' onClick={deleteUser}   variant="outlined" />
+          </Stack>
         </Toolbar>
       </Container>
     </AppBar>
   )
 }
+

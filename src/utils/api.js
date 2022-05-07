@@ -33,6 +33,28 @@ class Api {
         }).then(onResponse)
     }
 
+    editCurrentUser(updateUserInfo) {
+        return fetch(`${this._url}/users/me`, {
+            method : 'PATCH',
+            headers: {
+                authorization: `Bearer ${this._token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateUserInfo),
+        }).then(onResponse);
+    }
+
+    editAvatarUser(updateAvatar) {
+            return fetch(`${this._url}/users/me/avatar`, {
+                method: 'PATCH',
+                headers: {
+                    authorization: `Bearer ${this._token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updateAvatar),
+            }).then(onResponse);
+        }
+
     addLike(postId) {
         return fetch(`${this._url}/posts/likes/${postId}`, {
             method:'PUT',
@@ -85,6 +107,25 @@ class Api {
                 authorization: `Bearer ${this._token}`
             }
         }).then(onResponse)
+    }
+    signUp(userData) {
+        return fetch(`${this._url}/signup`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+        }).then(onResponse);
+    }
+
+    signIn(userData) {
+        return fetch(`${this._url}/signin`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+        }).then(onResponse);
     }
     
 }
