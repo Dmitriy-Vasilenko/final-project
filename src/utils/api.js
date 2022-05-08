@@ -108,6 +108,18 @@ class Api {
             }
         }).then(onResponse)
     }
+
+    addComments(comment, postId) {
+        return fetch(`${this._url}/posts/comments/${postId}`, {
+            method:'POST',
+            headers: {
+                authorization: `Bearer ${this._token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(comment)
+        }).then(onResponse)
+    }
+
     signUp(userData) {
         return fetch(`${this._url}/signup`, {
             method: 'POST',

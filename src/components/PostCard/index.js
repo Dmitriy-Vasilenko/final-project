@@ -5,7 +5,8 @@ import { useApi } from '../../hooks/useApi';
 import FavoriteContext from '../../contexts/favoriteContext';
 import UserContext from '../../contexts/userContext';
 import PostsContext from '../../contexts/postsContext';
-import { Button, Grid, Paper, Card, CardHeader, CardContent, CardMedia, CardActions, Avatar, Typography, Box, IconButton, Badge } from '@mui/material';
+import ModalContext from '../../contexts/modalContext';
+import { Button, Grid, Paper, Card, CardHeader, CardContent, CardMedia, CardActions, Avatar, Typography, Box, IconButton, Badge, TextField } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
@@ -17,11 +18,13 @@ export const PostCard = () => {
   const { writeLS, removeLS } = useLocalStorage();
   const { favorite, setFavorite } = useContext(FavoriteContext);
   const { postsTotal, setPostsTotal } = useContext(PostsContext);
+  const { setModalState } = useContext(ModalContext);
   const { user } = useContext(UserContext);
   const [comments, setComments] = useState(null);
   const [post, setPost] = useState(null);  
   const [showComments, setShowComments] = useState('none');
   const [badgeContent, setBadgeContent] = useState(null);
+  const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
       api.getPost(params.postId)
@@ -37,8 +40,21 @@ export const PostCard = () => {
     setFavorite(prevState => [...prevState, post._id]);
 
     api.addLike(post._id)
-    .then(addedLike => setBadgeContent(addedLike.likes.length))
-    .catch(() => alert('Не удалось поставить лайк'))
+    .then(addedLike => {
+      setBadgeContent(addedLike.likes.length)
+      setModalState(() => {
+          return {
+            isOpen: true, 
+            msg: 'Вы поставили лайк'
+          }
+      })
+    })
+    .catch(() => setModalState(() => {
+      return {
+        isOpen: true,
+        msg:'Не удалось поставить лайк'
+      }
+    }))
   }
 
   const removeFavorite = () => {
@@ -46,19 +62,37 @@ export const PostCard = () => {
     setFavorite(prevState => prevState.filter(id => post._id !== id));
 
     api.deleteLike(post._id)
-    .then(deletedLike => setBadgeContent(deletedLike.likes.length))
-    .catch(() => alert('Не удалось снять лайк'))
+    .then(deletedLike => {
+      setBadgeContent(deletedLike.likes.length)
+      setModalState(() => {
+        return {
+          isOpen: true, 
+          msg: 'Вы убрали лайк'
+        }
+      })
+    })
+    .catch(() => setModalState(() => {
+      return {
+        isOpen: true, 
+        msg: 'Не удалось снять лайк'
+      }
+    }))
   }
 
   const deleteMyPost = () => {
     api.deletePost(post._id)
     setPostsTotal(postsTotal - 1)
+    setModalState(() => {
+      return {
+        isOpen: true, 
+        msg: 'Ваш пост удален'
+      }
+    })
     navigate('/')
   }
 
   const getPostComments = () => {
     if (comments.length !== 0) {
-      console.log(comments)
       api.getComments(params.postId)
       .then(data => {
       setComments(data)
@@ -71,6 +105,14 @@ export const PostCard = () => {
   const handleCloseComments = () => {
     setShowComments('none')
   }
+
+  const handleChangeInputValue = (event) => {
+    setInputValue(event.target.value)
+  }
+
+/*   const sendComment = () => {
+    api.addComments(params.postId)
+  } */
 
   return (
     <Box sx={{
@@ -137,6 +179,14 @@ export const PostCard = () => {
 
                 <CardContent sx={{display: `${showComments}`}}>
                   <Grid container >
+                  <Grid container item sx={{mb: 2}} alignItems='center'>
+                    <Grid item xs={6} sx={{mr: 2}}>
+                      <TextField label="Оставьте комментарий" variant="outlined" value={inputValue} onChange={handleChangeInputValue} />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Button variant='outlined' size='small' onClick={sendComment}>Отправить</Button>
+                    </Grid>
+                  </Grid>
                   { comments && comments.map(
                     (comment) => 
                     (<Grid 
@@ -146,6 +196,7 @@ export const PostCard = () => {
                         direction='row' 
                         justifyContent='flex-start' 
                         key={comment._id}>
+                      
                       <Grid item>
                         <Avatar src={comment.author.avatar} />
                       </Grid>
