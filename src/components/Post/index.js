@@ -30,14 +30,13 @@ export const Post = ({ post, isItFavorite }) => {
     api.addLike(post._id)
     .then(addedLike => {
       setBadgeContent(addedLike.likes.length)
-      setModalState(() => {
-        return {
-          isOpen: true, 
-          msg: 'Вы поставили лайк'
-        }
-      })
     })
-    .catch(() => alert('Не удалось поставить лайк'))
+    .catch(() => setModalState(() => {
+      return {
+        isOpen: true,
+        msg: 'Не удалось поставить лайк'
+      }
+    }))
   }
 
   const removeFavorite = () => {
@@ -46,9 +45,14 @@ export const Post = ({ post, isItFavorite }) => {
 
     api.deleteLike(post._id)
     .then(deletedLike => {
-      return setBadgeContent(deletedLike.likes.length)
+      setBadgeContent(deletedLike.likes.length)
     })
-    .catch(() => alert('Не удалось снять лайк'))
+    .catch(() => setModalState(() => {
+      return {
+        isOpen: true,
+        msg: 'Не удалось убрать лайк'
+      }
+    }))
   }
 
   return (

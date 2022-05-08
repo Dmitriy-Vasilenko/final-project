@@ -11,7 +11,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 
-export const PostCard = () => {
+export const PostCard = ({comments, setComments}) => {
   const api = useApi();
   const params = useParams();
   const navigate = useNavigate();
@@ -20,7 +20,6 @@ export const PostCard = () => {
   const { postsTotal, setPostsTotal } = useContext(PostsContext);
   const { setModalState } = useContext(ModalContext);
   const { user } = useContext(UserContext);
-  const [comments, setComments] = useState(null);
   const [post, setPost] = useState(null);  
   const [showComments, setShowComments] = useState('none');
   const [badgeContent, setBadgeContent] = useState(null);
@@ -42,12 +41,6 @@ export const PostCard = () => {
     api.addLike(post._id)
     .then(addedLike => {
       setBadgeContent(addedLike.likes.length)
-      setModalState(() => {
-          return {
-            isOpen: true, 
-            msg: 'Вы поставили лайк'
-          }
-      })
     })
     .catch(() => setModalState(() => {
       return {
@@ -64,12 +57,6 @@ export const PostCard = () => {
     api.deleteLike(post._id)
     .then(deletedLike => {
       setBadgeContent(deletedLike.likes.length)
-      setModalState(() => {
-        return {
-          isOpen: true, 
-          msg: 'Вы убрали лайк'
-        }
-      })
     })
     .catch(() => setModalState(() => {
       return {
@@ -92,15 +79,18 @@ export const PostCard = () => {
   }
 
   const getPostComments = () => {
-    if (comments.length !== 0) {
-      api.getComments(params.postId)
+    api.getComments(params.postId)
       .then(data => {
       setComments(data)
       setShowComments('block')
     })
-    .catch(error => console.log(error))
-    }     
-  }
+    .catch(() => setModalState(() => {
+      return {
+        isOpen: true, 
+        msg: 'Не удалось загрузить комментарии'
+      }
+    }))
+  }     
 
   const handleCloseComments = () => {
     setShowComments('none')
@@ -111,9 +101,18 @@ export const PostCard = () => {
   }
 
   const sendComment = () => {
-    console.log(params.postId)
     api.addComments(inputValue, params.postId)
-    .then(data => console.log(data))
+    .then(api.getComments(params.postId))
+    .then(data => {
+      getPostComments()
+      setInputValue('')
+    })
+    .catch(() => setModalState(() => {
+      return {
+        isOpen: true, 
+        msg: 'Не удалось отправить комментарий'
+      }
+    }))
   }
 
   return (
@@ -181,83 +180,79 @@ export const PostCard = () => {
 
                 <CardContent sx={{display: `${showComments}`}}>
                   <Grid container >
-                  <Grid container item sx={{mb: 2}} alignItems='center'>
-                    <Grid item xs={6} sx={{mr: 2}}>
-                      <TextField label="Оставьте комментарий" variant="outlined" value={inputValue} onChange={handleChangeInputValue} />
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Button variant='outlined' size='small' onClick={sendComment}>Отправить</Button>
-                    </Grid>
-                  </Grid>
-                  { comments && comments.map(
-                    (comment) => 
-                    (<Grid 
-                        container item
-                        spacing={2} 
-                        sx={{marginBottom: 2}} 
-                        direction='row' 
-                        justifyContent='flex-start' 
-                        key={comment._id}>
-                      
-                      <Grid item>
-                        <Avatar src={comment.author.avatar} />
+                    <Grid container item sx={{mb: 2}} alignItems='center'>
+                      <Grid item xs={6} sx={{mr: 2}}>
+                        <TextField label="Оставьте комментарий" variant="outlined" value={inputValue} onChange={handleChangeInputValue} />
                       </Grid>
-                      <Grid item>
-                        <Typography variant='subtitle2' component='h6'>{comment.author.name}</Typography>
-                      <Typography variant='body2' paragraph>{comment.text}</Typography> 
-                      </Grid> 
-                    </Grid>)
-                  )}
-                  {
-                    comments && 
-                    <Button 
-                      sx={{fontSize: '14px'}} 
-                      onClick={handleCloseComments}
-                    >
-                      Скрыть комментарии
-                    </Button>
-                  }
-                </Grid> 
-              </CardContent>
-            </Grid>
-
-
+                      <Grid item xs={4}>
+                        <Button variant='outlined' size='small' onClick={sendComment}>Отправить</Button>
+                      </Grid>
+                    </Grid>
+                    { comments && comments.map(
+                      (comment) => 
+                      (<Grid 
+                          container item
+                          spacing={2} 
+                          sx={{marginBottom: 2}} 
+                          direction='row' 
+                          justifyContent='flex-start' 
+                          key={comment._id}>
+                        
+                        <Grid item>
+                          <Avatar src={comment.author.avatar} />
+                        </Grid>
+                        <Grid item>
+                          <Typography variant='subtitle2' component='h6'>{comment.author.name}</Typography>
+                        <Typography variant='body2' paragraph>{comment.text}</Typography> 
+                        </Grid> 
+                      </Grid>)
+                    )}
+                    {
+                      comments && 
+                      <Button 
+                        sx={{fontSize: '14px'}} 
+                        onClick={handleCloseComments}
+                      >
+                        Скрыть комментарии
+                      </Button>
+                    }
+                  </Grid> 
+                </CardContent>
+              </Grid>
 
             </Grid>      
 
             <Grid container item xs={6} sx={{mt: 4}} direction='column' justifyContent='space-between'>
-                  <Grid item>
-                    <CardContent>
-                      <Typography component='h2' variant='h6' gutterBottom color='primary.dark'>
-                        {post.title}
-                      </Typography>
-                      <Typography variant='body2' align='justify' paragraph>
-                        {post.text}
-                      </Typography>
-                    </CardContent>
-                  </Grid>
+              <Grid item>
+                <CardContent>
+                  <Typography component='h2' variant='h6' gutterBottom color='primary.dark'>
+                    {post.title}
+                  </Typography>
+                  <Typography variant='body2' align='justify' paragraph>
+                    {post.text}
+                  </Typography>
+                </CardContent>
+              </Grid>
               
-                  {
-                  user?._id === post.author._id ?
-                  (
-                    <Grid container item spacing={8} justifyContent='flex-end'>
+              {
+              user?._id === post.author._id ?
+              (
+                <Grid container item spacing={8} justifyContent='flex-end'>
 
-                      <Grid item xs={4}>
-                        <Button variant='outlined' onClick={() => console.log('Редактировать')}>Редактировать</Button>
-                      </Grid>
+                  <Grid item xs={4}>
+                    <Button variant='outlined' onClick={() => console.log('Редактировать')}>Редактировать</Button>
+                  </Grid>
 
-                      <Grid item xs={4} sx={{mb: 3}}>
-                        <Button variant='outlined' onClick={deleteMyPost}>Удалить</Button>
-                      </Grid>
+                  <Grid item xs={4} sx={{mb: 3}}>
+                    <Button variant='outlined' onClick={deleteMyPost}>Удалить</Button>
+                  </Grid>
 
-                    </Grid>
-                  ) : (
-                    <span />
-                  )
-                }
-
+                </Grid>
+              ) : (
+                <span />
+              )
+            }
             </Grid>
-            
           </Grid>          
         </Card>
       </Paper>
@@ -266,9 +261,5 @@ export const PostCard = () => {
       <Button variant='outlined' onClick={() => navigate('/')}>Назад</Button>
 
     </Box>
-    
-
-      
-
   )
 }
