@@ -8,7 +8,8 @@ import PostsContext from '../../contexts/postsContext';
 import { useApi } from '../../hooks/useApi';
 
 
-export const CreatePost = ({ quantityPages }) => {
+
+export const CreatePost = ({ page }) => {
   const navigate = useNavigate();
   const { setPostsTotal } = useContext(PostsContext);
   const api = useApi();
@@ -24,7 +25,7 @@ export const CreatePost = ({ quantityPages }) => {
     })
     .then((data) => {
         setPostsTotal((prevState) => [...prevState, data]);
-        navigate(`/?page=${quantityPages}`);
+        navigate(`/?page=${page}`);
     })
     .catch((err) => alert(err));
 
@@ -50,7 +51,7 @@ export const CreatePost = ({ quantityPages }) => {
             <TextField fullWidth label='Введите теги через запятую' name='inputTags' type='text'/>
           </Grid>
           <Grid item display='flex' gap='10px' justifyContent='flex-end'>
-            <Button variant="outlined" onClick={() => navigate(`/?page=${quantityPages}`)}>Отмена</Button>
+            <Button variant="outlined" onClick={() => navigate(`/?page=${page}`)}>Отмена</Button>
             <Button variant="contained" type='submit'>Создать</Button>
           </Grid>
         </Grid>
