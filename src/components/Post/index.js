@@ -44,12 +44,12 @@ export const Post = ({ post, isItFavorite }) => {
   }
 
   return (
-    <Paper elevation={4} sx={{maxWidth: 400, height: 520}}>
-      <Card sx={{ maxWidth: 400, p: 1, height: '100%'}}>
+    <Paper elevation={4} sx={{maxWidth: 400, height: 500}}>
+      <Card sx={{ maxWidth: 400, height: '100%'}}>
         <CardHeader 
           sx={{display: 'flex', alignItems: 'flex-start'}}
           avatar={
-            <Avatar aria-label="avatar" src={post.author.avatar} sx={{width: 70, height: 70}}/>
+            <Avatar aria-label="avatar" src={post.author.avatar} sx={{width: 50, height: 50}}/>
           }
           title={
             <Typography color='primary.dark' variant='h6' component='h3' noWrap={true} sx={{fontSize: '18px', maxWidth: '220px'}}>
@@ -118,7 +118,7 @@ export const Post = ({ post, isItFavorite }) => {
             </IconButton>
             </Grid>
             <Grid item>
-              <Button onClick={() => navigate(`post/${post._id}`)}>Перейти</Button>
+              <Button onClick={() => navigate(`post/${post._id}`)}>Читать</Button>
             </Grid>
           </Grid>
         </CardActions>          

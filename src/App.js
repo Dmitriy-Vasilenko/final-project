@@ -5,12 +5,22 @@ import { Header } from './components/Header';
 import { PostList } from './components/PostList';
 import { PostCard } from './components/PostCard';
 import { Footer } from './components/Footer';
+import { EditUser } from './components/EditUser';
+import { useLocalStorage } from './hooks/useLocalStorage';
+
 import UserContext from './contexts/userContext';
 import PostsContext from './contexts/postsContext';
 import FavoriteContext from './contexts/favoriteContext';
+import ModalContext from './contexts/modalContext';
+import FormModalContext from './contexts/formModalContext';
+
+import Modal from './components/Modal';
+import { FormModal } from './components/FormModal';
+
 import './index.css';
 
 export const App = () => {
+  const { readLS } = useLocalStorage();
   const api = useApi();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState(null);
@@ -18,43 +28,73 @@ export const App = () => {
   const [favorite, setFavorite] = useState(JSON.parse(localStorage.getItem('favorite')) || []);
   const [page, setPage] = useState(JSON.parse(localStorage.getItem('page')) || 1);
   const [quantityPages, setQuantityPages] = useState(0);
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    msg: null,
+});
+  const [modalFormState, setModalFormState] = useState({
+    isOpen: false,
+    msg: null,
+});
 
   useEffect(() => {
-    api.getPostsTotal()
-    .then(data => setPostsTotal(data.length))
-  }, [])
+    api.getUser().then((user) => setUser(user));
+  }, []);
 
   useEffect(() => {
-    api.getPosts(page)
-    .then(post => {
-      setPosts(post.posts)
-      setQuantityPages(Math.ceil(post.total/12))
-    })
-    .catch(err => alert(err))
-    }, [page, quantityPages, favorite, postsTotal]) 
+    const token = readLS('token');
+    if (!token) {
+        setModalFormState(() => {
+            return {
+                isOpen: true,
+                msg: '',
+            };
+        });
+    }
+  }, []);
+
+    useEffect(() => {
+      if(user){
+        api.getPosts(page)
+        .then(post => {
+          setPosts(post.posts)
+          setQuantityPages(Math.ceil(post.total/12))
+        })
+        .catch(err => alert(err))
+      }
+    }, [page, quantityPages, favorite, user]); 
+  
+
 
   return (
-    <UserContext.Provider value={{user, setUser}}>
-      <PostsContext.Provider value={{posts, setPosts, postsTotal, setPostsTotal}}>
-        <FavoriteContext.Provider value={{favorite, setFavorite}}>
-          <div className='app'>
-          <Header/>
-          <Routes>
-            <Route path='/' element={
-              <PostList 
-                page={page}
-                setPage={setPage} 
-                quantityPages={quantityPages}
-              />
-            }>
-            </Route>
-            <Route path='post/:postId' element={<PostCard />} />
-          </Routes>
-          <Footer/>
-        </div>
-        </FavoriteContext.Provider>
-      </PostsContext.Provider>
-    </UserContext.Provider>
+      <UserContext.Provider value={{user, setUser}}>
+        <ModalContext.Provider value={{ modalState, setModalState }}>
+          <FormModalContext.Provider value={{ modalFormState, setModalFormState }}>
+            <PostsContext.Provider value={{posts, setPosts, postsTotal, setPostsTotal}}>
+              <FavoriteContext.Provider value={{favorite, setFavorite}}>
+                <div className='app'>
+                  <Modal />
+                  <FormModal />
+                <Header/>
+                <Routes>
+                  <Route path='/' element={
+                    <PostList 
+                      page={page}
+                      setPage={setPage} 
+                      quantityPages={quantityPages}
+                    />
+                  }>
+                  </Route>
+                  <Route path='post/:postId' element={<PostCard />} />
+                  <Route path='user/edit' element={<EditUser />} />
+                </Routes>
+                <Footer/>
+              </div>
+              </FavoriteContext.Provider>
+            </PostsContext.Provider>
+          </FormModalContext.Provider>
+        </ModalContext.Provider>
+      </UserContext.Provider>
   )
 }
 
