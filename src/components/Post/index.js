@@ -61,7 +61,7 @@ export const Post = ({ post, isItFavorite }) => {
           }
           title={
             <Typography color='primary.dark' variant='h6' component='h3' noWrap={true} sx={{fontSize: '18px', maxWidth: '220px'}}>
-              {post.title}
+              {post.author.name}
             </Typography>
           }
           subheader={
@@ -80,7 +80,10 @@ export const Post = ({ post, isItFavorite }) => {
         />
 
         <CardContent>
-          <Typography variant='body2' color='text.secondary' sx={{mb: 4, height: '50px', overflow: 'hidden', overflowWrap: 'break-word', textOverflow: 'ellipsis'}} align='justify'>
+          <Typography noWrap={true}>
+            {post.title}
+          </Typography>
+          <Typography variant='body2' color='text.secondary' sx={{mb: 4, height: '40px', overflow: 'hidden', overflowWrap: 'break-word', textOverflow: 'ellipsis'}} align='justify'>
             {post.text}
           </Typography>
           <Stack direction='row' spacing={1}>

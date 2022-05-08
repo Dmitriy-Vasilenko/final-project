@@ -10,7 +10,7 @@ import { useApi } from '../../hooks/useApi';
 
 export const CreatePost = ({ quantityPages }) => {
   const navigate = useNavigate();
-  const { setPosts } = useContext(PostsContext);
+  const { setPostsTotal } = useContext(PostsContext);
   const api = useApi();
 
   const handleSubmit = (event) => {
@@ -23,7 +23,7 @@ export const CreatePost = ({ quantityPages }) => {
         tags: inputTags.value.trim().split(', ' && ',')
     })
     .then((data) => {
-        setPosts((prevState) => [...prevState, data]);
+        setPostsTotal((prevState) => [...prevState, data]);
         navigate(`/?page=${quantityPages}`);
     })
     .catch((err) => alert(err));
