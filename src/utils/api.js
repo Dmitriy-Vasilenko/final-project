@@ -120,6 +120,15 @@ class Api {
         }).then(onResponse)
     }
 
+    deleteComments(commentId, postId) {
+        return fetch(`${this._url}/posts/comments/${postId}/${commentId}`, {
+            method:'DELETE',
+            headers: {
+                authorization: `Bearer ${this._token}`
+            }
+        }).then(onResponse)
+    }
+
     signUp(userData) {
         return fetch(`${this._url}/signup`, {
             method: 'POST',
