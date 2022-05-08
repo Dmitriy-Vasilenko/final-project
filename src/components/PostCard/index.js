@@ -110,9 +110,11 @@ export const PostCard = () => {
     setInputValue(event.target.value)
   }
 
-/*   const sendComment = () => {
-    api.addComments(params.postId)
-  } */
+  const sendComment = () => {
+    console.log(params.postId)
+    api.addComments(inputValue, params.postId)
+    .then(data => console.log(data))
+  }
 
   return (
     <Box sx={{

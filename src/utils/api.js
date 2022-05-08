@@ -116,7 +116,7 @@ class Api {
                 authorization: `Bearer ${this._token}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(comment)
+            body: JSON.stringify({'text': comment})
         }).then(onResponse)
     }
 
