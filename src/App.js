@@ -90,10 +90,15 @@ export const App = () => {
                     <PostCard 
                       comments={comments} 
                       setComments={setComments} 
+                      page={page}
                     />
                   }/>
                   <Route path='user/edit' element={<EditUser />} />
-                  <Route path='post/create' element={<CreatePost quantityPages={quantityPages} />} />
+                  <Route path='post/create' element={
+                    <CreatePost 
+                      page={page} 
+                    />
+                  }/>
                 </Routes>
                 <Footer/>
               </div>
