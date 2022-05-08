@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApi } from '../../hooks/useApi';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import FavoriteContext from '../../contexts/favoriteContext';
+import ModalContext from '../../contexts/modalContext';
 import { Paper, Card, CardHeader, CardContent, CardMedia, CardActions, Typography, Avatar, IconButton, Badge, Button, Grid, Chip, Stack } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -14,6 +15,7 @@ export const Post = ({ post, isItFavorite }) => {
   const navigate = useNavigate();
   const { writeLS, removeLS } = useLocalStorage();
   const { setFavorite } = useContext(FavoriteContext);
+  const { setModalState } = useContext(ModalContext);
   const [badgeContent, setBadgeContent] = useState(post.likes.length);
   const createdDate = dayjs(post.created_at).format('D MMMM YYYY');
 
@@ -27,7 +29,13 @@ export const Post = ({ post, isItFavorite }) => {
 
     api.addLike(post._id)
     .then(addedLike => {
-      return setBadgeContent(addedLike.likes.length);
+      setBadgeContent(addedLike.likes.length)
+      setModalState(() => {
+        return {
+          isOpen: true, 
+          msg: 'Вы поставили лайк'
+        }
+      })
     })
     .catch(() => alert('Не удалось поставить лайк'))
   }
@@ -44,12 +52,12 @@ export const Post = ({ post, isItFavorite }) => {
   }
 
   return (
-    <Paper elevation={4} sx={{maxWidth: 400, height: 520}}>
-      <Card sx={{ maxWidth: 400, p: 1, height: '100%'}}>
+    <Paper elevation={4} sx={{maxWidth: 400, height: 500}}>
+      <Card sx={{ maxWidth: 400, height: '100%'}}>
         <CardHeader 
           sx={{display: 'flex', alignItems: 'flex-start'}}
           avatar={
-            <Avatar aria-label="avatar" src={post.author.avatar} sx={{width: 70, height: 70}}/>
+            <Avatar aria-label="avatar" src={post.author.avatar} sx={{width: 50, height: 50}}/>
           }
           title={
             <Typography color='primary.dark' variant='h6' component='h3' noWrap={true} sx={{fontSize: '18px', maxWidth: '220px'}}>
@@ -118,7 +126,7 @@ export const Post = ({ post, isItFavorite }) => {
             </IconButton>
             </Grid>
             <Grid item>
-              <Button onClick={() => navigate(`post/${post._id}`)}>Перейти</Button>
+              <Button onClick={() => navigate(`post/${post._id}`)}>Читать</Button>
             </Grid>
           </Grid>
         </CardActions>          
