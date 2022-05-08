@@ -26,8 +26,9 @@ export const App = () => {
   const api = useApi();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState(null);
-  const [favorite, setFavorite] = useState(JSON.parse(localStorage.getItem('favorite')) || [])
-  const [page, setPage] = useState(JSON.parse(localStorage.getItem('page')) || 1)
+  const [postsTotal, setPostsTotal] = useState(null);
+  const [favorite, setFavorite] = useState(JSON.parse(localStorage.getItem('favorite')) || []);
+  const [page, setPage] = useState(JSON.parse(localStorage.getItem('page')) || 1);
   const [quantityPages, setQuantityPages] = useState(0);
   const [modalState, setModalState] = useState({
     isOpen: false,
@@ -39,7 +40,9 @@ export const App = () => {
 });
 
   useEffect(() => {
-    api.getUser().then((user) => setUser(user));
+    api.getUser()
+    .then((user) => setUser(user))
+    .then(api.getPostsTotal().then(posts => setPostsTotal(posts)))
   }, []);
 
   useEffect(() => {
@@ -63,15 +66,13 @@ export const App = () => {
         })
         .catch(err => alert(err))
       }
-    }, [page, quantityPages, favorite, user, posts]); 
-  
-
+    }, [page, quantityPages, favorite, user, postsTotal, posts]); 
 
   return (
       <UserContext.Provider value={{user, setUser}}>
         <ModalContext.Provider value={{ modalState, setModalState }}>
           <FormModalContext.Provider value={{ modalFormState, setModalFormState }}>
-            <PostsContext.Provider value={{posts, setPosts}}>
+            <PostsContext.Provider value={{posts, setPosts, postsTotal, setPostsTotal}}>
               <FavoriteContext.Provider value={{favorite, setFavorite}}>
                 <div className='app'>
                   <Modal />
