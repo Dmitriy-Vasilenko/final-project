@@ -66,7 +66,7 @@ export const App = () => {
         })
         .catch(err => alert(err))
       }
-    }, [page, quantityPages, favorite, user, postsTotal, posts, comments]); 
+    }, [page, quantityPages, favorite, user, postsTotal, comments]); 
 
   return (
       <UserContext.Provider value={{user, setUser}}>

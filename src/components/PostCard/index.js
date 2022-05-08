@@ -11,11 +11,11 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 
-export const PostCard = ({comments, setComments}) => {
+export const PostCard = ({ comments, setComments }) => {
   const api = useApi();
   const params = useParams();
   const navigate = useNavigate();
-  const { writeLS, removeLS, readLS } = useLocalStorage();
+  const { writeLS, removeLS } = useLocalStorage();
   const { favorite, setFavorite } = useContext(FavoriteContext);
   const { postsTotal, setPostsTotal } = useContext(PostsContext);
   const { setModalState } = useContext(ModalContext);
@@ -115,11 +115,6 @@ export const PostCard = ({comments, setComments}) => {
     }))
   }
 
-  const deleteMyComment = () => {
-    comments.map(elem => console.log(elem._id))
-    //api.deleteComments(myComment, params.postId)
-  }
-
   return (
     <Box sx={{
       display: 'flex',
@@ -215,7 +210,7 @@ export const PostCard = ({comments, setComments}) => {
                           (
                             <Grid item>
                               <Button size='small' variant='outlined' sx={{ml: 3}} onClick={() => {
-                                api.deleteComments(comment._id, params.postId).then(getPostComments())
+                                api.deleteComments(comment._id, params.postId).then(data => getPostComments())
                               }}>Удалить</Button>
                             </Grid>
                             
