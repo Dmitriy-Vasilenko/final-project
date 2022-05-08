@@ -66,7 +66,7 @@ export const App = () => {
         })
         .catch(err => alert(err))
       }
-    }, [page, quantityPages, favorite, user, postsTotal, comments]); 
+    }, [page, quantityPages, favorite, user, postsTotal, comments, posts]); 
 
   return (
       <UserContext.Provider value={{user, setUser}}>
@@ -93,7 +93,7 @@ export const App = () => {
                     />
                   }/>
                   <Route path='user/edit' element={<EditUser />} />
-                  <Route path='post/create' element={<CreatePost quantityPages={quantityPages}/>} />
+                  <Route path='post/create' element={<CreatePost quantityPages={quantityPages} />} />
                 </Routes>
                 <Footer/>
               </div>
