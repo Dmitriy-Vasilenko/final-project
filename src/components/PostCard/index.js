@@ -5,7 +5,7 @@ import { useApi } from '../../hooks/useApi';
 import FavoriteContext from '../../contexts/favoriteContext';
 import UserContext from '../../contexts/userContext';
 import PostsContext from '../../contexts/postsContext';
-import { Button, Grid, Paper, Card, CardHeader, CardContent, CardMedia, CardActions, Avatar, Typography, Box, IconButton, Badge, Divider } from '@mui/material';
+import { Button, Grid, Paper, Card, CardHeader, CardContent, CardMedia, CardActions, Avatar, Typography, Box, IconButton, Badge } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
@@ -17,7 +17,7 @@ export const PostCard = () => {
   const { writeLS, removeLS } = useLocalStorage();
   const { favorite, setFavorite } = useContext(FavoriteContext);
   const { postsTotal, setPostsTotal } = useContext(PostsContext);
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [comments, setComments] = useState(null);
   const [post, setPost] = useState(null);  
   const [showComments, setShowComments] = useState('none');
@@ -30,12 +30,6 @@ export const PostCard = () => {
         setComments(data.comments)
         setBadgeContent(data.likes.length)
       })
-  }, [])
-
-  // Временное решение для получения id user
-  
-  useEffect(() => {
-    api.getUser().then(user => setUser(user))
   }, [])
 
   const addFavorite = () => { 

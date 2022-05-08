@@ -38,7 +38,9 @@ export const App = () => {
 });
 
   useEffect(() => {
-    api.getUser().then((user) => setUser(user));
+    api.getUser()
+    .then((user) => setUser(user))
+    .then(api.getPostsTotal().then(posts => setPostsTotal(posts)))
   }, []);
 
   useEffect(() => {
@@ -62,9 +64,7 @@ export const App = () => {
         })
         .catch(err => alert(err))
       }
-    }, [page, quantityPages, favorite, user]); 
-  
-
+    }, [page, quantityPages, favorite, user, postsTotal]); 
 
   return (
       <UserContext.Provider value={{user, setUser}}>
