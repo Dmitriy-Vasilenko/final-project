@@ -5,3 +5,4 @@ export const CreatePost = () => {
     <div>CreatePost</div>
   )
 }
+
