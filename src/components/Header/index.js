@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
-import UserContext from '../../contexts/userContext';
 import { AppBar, Container, Toolbar, Typography, Box, Avatar, Chip, Stack } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
+import UserContext from '../../contexts/userContext';
 import FormModalContext from '../../contexts/formModalContext';
 import { Logo } from '../Logo';
 
@@ -11,11 +11,12 @@ export const Header = () => {
   const navigateToEditPage = () => {
     navigate('user/edit');
   }
-  const {user} = useContext(UserContext);
+  const {user, setUser} = useContext(UserContext);
   const { setModalFormState } = useContext(FormModalContext);
 
   const deleteUser = () => {
     localStorage.removeItem('token');
+    setUser(null);
     setModalFormState(() => {
       return {
           isOpen: true,
