@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+
 import { useApi } from './hooks/useApi';
+import { useLocalStorage } from './hooks/useLocalStorage';
+
 import { Header } from './components/Header';
 import { PostList } from './components/PostList';
 import { PostCard } from './components/PostCard';
 import { Footer } from './components/Footer';
 import { EditUser } from './components/EditUser';
-import { useLocalStorage } from './hooks/useLocalStorage';
+import { FormModal } from './components/FormModal';
+import { CreatePost } from './components/CreatePost';
+import Modal from './components/Modal';
 
 import UserContext from './contexts/userContext';
 import PostsContext from './contexts/postsContext';
 import FavoriteContext from './contexts/favoriteContext';
 import ModalContext from './contexts/modalContext';
 import FormModalContext from './contexts/formModalContext';
-
-import Modal from './components/Modal';
-import { FormModal } from './components/FormModal';
 
 import './index.css';
 
@@ -61,7 +63,7 @@ export const App = () => {
         })
         .catch(err => alert(err))
       }
-    }, [page, quantityPages, favorite, user]); 
+    }, [page, quantityPages, favorite, user, posts]); 
   
 
 
@@ -86,6 +88,7 @@ export const App = () => {
                   </Route>
                   <Route path='post/:postId' element={<PostCard />} />
                   <Route path='user/edit' element={<EditUser />} />
+                  <Route path='post/create' element={<CreatePost quantityPages={quantityPages}/>} />
                 </Routes>
                 <Footer/>
               </div>

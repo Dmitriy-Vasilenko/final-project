@@ -24,7 +24,7 @@ export const PostCard = () => {
 
   useEffect(() => {
     api.getUser().then(user => console.log(user))
-  })
+  }, [])
 
   return (
     <Grid container direction='column' alignItems='center' justifyContent='center' >
