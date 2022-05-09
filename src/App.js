@@ -25,7 +25,7 @@ export const App = () => {
   const api = useApi();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState(null);
-  const [postsTotal, setPostsTotal] = useState(null);
+  const [postsTotal, setPostsTotal] = useState(null) || [];
   const [favorite, setFavorite] = useState(JSON.parse(localStorage.getItem('favorite')) || []);
   const [page, setPage] = useState(JSON.parse(localStorage.getItem('page')) || 1);
   const [quantityPages, setQuantityPages] = useState(0);

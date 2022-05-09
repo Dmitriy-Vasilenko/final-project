@@ -68,14 +68,17 @@ export const PostCard = ({ comments, setComments, page }) => {
 
   const deleteMyPost = () => {
     api.deletePost(post._id)
-    setPostsTotal(postsTotal - 1)
-    setModalState(() => {
-      return {
-        isOpen: true, 
-        msg: 'Ваш пост удален'
-      }
-    })
-    navigate(`/?page=${page}`);
+    .then(api.getPostsTotal()
+    .then(data => {
+      setPostsTotal(data)
+      setModalState(() => {
+        return {
+          isOpen: true, 
+          msg: 'Ваш пост удален'
+        }
+      })
+      navigate(`/?page=${page}`);
+    }))
   }
 
   const getPostComments = () => {
