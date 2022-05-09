@@ -11,6 +11,7 @@ import { Footer } from './components/Footer';
 import { EditUser } from './components/EditUser';
 import { FormModal } from './components/FormModal';
 import { CreatePost } from './components/CreatePost';
+import { EditPost } from './components/EditPost';
 import Modal from './components/Modal';
 
 import UserContext from './contexts/userContext';
@@ -77,7 +78,7 @@ export const App = () => {
                 <div className='app'>
                   <Modal />
                   <FormModal />
-                <Header/>
+                <Header page={page}/>
                 <Routes>
                   <Route path='/' element={
                     <PostList 
@@ -93,6 +94,7 @@ export const App = () => {
                       page={page}
                     />
                   }/>
+                  <Route path='post/:postId/edit' element={<EditPost />} />
                   <Route path='user/edit' element={<EditUser />} />
                   <Route path='post/create' element={
                     <CreatePost 

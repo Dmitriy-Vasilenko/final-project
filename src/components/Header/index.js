@@ -6,7 +6,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import FormModalContext from '../../contexts/formModalContext';
 import { Logo } from '../Logo';
 
-export const Header = () => {
+export const Header = ({page}) => {
   const navigate = useNavigate();
   const navigateToEditPage = () => {
     navigate('user/edit');
@@ -34,7 +34,7 @@ export const Header = () => {
             alignItems: 'center',
             gap: '10px'
           }}>
-            <Logo/>
+            <Logo page={page}/>
             <Typography>ADM Posts</Typography>
           </Box>
           <Box component='div' sx={{

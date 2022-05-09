@@ -255,7 +255,7 @@ export const PostCard = ({ comments, setComments, page }) => {
                 <Grid container item spacing={8} justifyContent='flex-end'>
 
                   <Grid item xs={4}>
-                    <Button variant='outlined' onClick={() => console.log('Редактировать')}>Редактировать</Button>
+                    <Button variant='outlined' onClick={() => navigate('edit')}>Редактировать</Button>
                   </Grid>
 
                   <Grid item xs={4} sx={{mb: 3}}>
