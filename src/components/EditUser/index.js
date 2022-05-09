@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import{Grid, Typography, TextField, Button} from '@mui/material';
 import UserContext from '../../contexts/userContext';
 import { useApi } from '../../hooks/useApi';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 export const EditUser = () => {
-  const navigate = useNavigate();
-
+    const navigate = useNavigate();
+    const {readLS} = useLocalStorage();
+    const page = readLS('page')
     const api = useApi();
 
     const{user, setUser} = useContext(UserContext);
@@ -24,13 +26,13 @@ export const EditUser = () => {
         api.editAvatarUser ({ avatar: userAvatar})
         .then((data) => {
           setUser(data);
-          navigate('/');
+          navigate(`/?page=${page}`);
         })
         .catch((err)=> alert(err));
     }
 
     const handleOut = () =>{
-        navigate('/');
+        navigate(`/?page=${page}`);
     }
     useEffect(() => {
         if(user) {

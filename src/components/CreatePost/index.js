@@ -6,6 +6,8 @@ import { Button, FormControl, Grid, TextField, Typography } from '@mui/material'
 import PostsContext from '../../contexts/postsContext';
 
 import { useApi } from '../../hooks/useApi';
+import { SecurityUpdateGood } from '@mui/icons-material';
+
 
 
 
@@ -13,6 +15,7 @@ export const CreatePost = ({ page }) => {
   const navigate = useNavigate();
   const { setPostsTotal } = useContext(PostsContext);
   const api = useApi();
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -24,10 +27,10 @@ export const CreatePost = ({ page }) => {
         tags: inputTags.value.trim().split(', ' && ',')
     })
     .then((data) => {
-        setPostsTotal((prevState) => [...prevState, data]);
+        setPostsTotal((prevState) => [...prevState, data]); 
         navigate(`/?page=${page}`);
     })
-    .catch((err) => alert(err));
+    .catch((err) => console.log(err));
 
 };
 

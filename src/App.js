@@ -11,6 +11,7 @@ import { Footer } from './components/Footer';
 import { EditUser } from './components/EditUser';
 import { FormModal } from './components/FormModal';
 import { CreatePost } from './components/CreatePost';
+import { EditPost } from './components/EditPost';
 import Modal from './components/Modal';
 
 import UserContext from './contexts/userContext';
@@ -25,7 +26,7 @@ export const App = () => {
   const api = useApi();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState(null);
-  const [postsTotal, setPostsTotal] = useState(null);
+  const [postsTotal, setPostsTotal] = useState(null) || [];
   const [favorite, setFavorite] = useState(JSON.parse(localStorage.getItem('favorite')) || []);
   const [page, setPage] = useState(JSON.parse(localStorage.getItem('page')) || 1);
   const [quantityPages, setQuantityPages] = useState(0);
@@ -33,16 +34,18 @@ export const App = () => {
   const [modalState, setModalState] = useState({
     isOpen: false,
     msg: null,
-});
+  });
   const [modalFormState, setModalFormState] = useState({
     isOpen: false,
     msg: null,
-});
+  });
 
   useEffect(() => {
     api.getUser()
     .then((user) => setUser(user))
-    .then(api.getPostsTotal().then(posts => setPostsTotal(posts)))
+    .then(api.getPostsTotal())
+    .then(posts => setPostsTotal(posts))
+    .catch(err => console.log(err))
   }, []);
 
   useEffect(() => {
@@ -64,7 +67,12 @@ export const App = () => {
           setPosts(post.posts)
           setQuantityPages(Math.ceil(post.total/12))
         })
-        .catch(err => alert(err))
+        .catch(() => setModalState(() => {
+          return {
+            isOpen: true,
+            msg: 'Возникла непредвиденная ошибка'
+          }
+        }))
       }
     }, [page, quantityPages, favorite, user, postsTotal, comments]); 
 
@@ -77,7 +85,7 @@ export const App = () => {
                 <div className='app'>
                   <Modal />
                   <FormModal />
-                <Header/>
+                <Header page={page}/>
                 <Routes>
                   <Route path='/' element={
                     <PostList 
@@ -93,6 +101,7 @@ export const App = () => {
                       page={page}
                     />
                   }/>
+                  <Route path='post/:postId/edit' element={<EditPost />} />
                   <Route path='user/edit' element={<EditUser />} />
                   <Route path='post/create' element={
                     <CreatePost 

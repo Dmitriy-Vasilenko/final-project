@@ -68,14 +68,17 @@ export const PostCard = ({ comments, setComments, page }) => {
 
   const deleteMyPost = () => {
     api.deletePost(post._id)
-    setPostsTotal(postsTotal - 1)
-    setModalState(() => {
-      return {
-        isOpen: true, 
-        msg: 'Ваш пост удален'
-      }
-    })
-    navigate(`/?page=${page}`);
+    .then(api.getPostsTotal()
+    .then(data => {
+      setPostsTotal(data)
+      setModalState(() => {
+        return {
+          isOpen: true, 
+          msg: 'Ваш пост удален'
+        }
+      })
+      navigate(`/?page=${page}`);
+    }))
   }
 
   const getPostComments = () => {
@@ -252,7 +255,7 @@ export const PostCard = ({ comments, setComments, page }) => {
                 <Grid container item spacing={8} justifyContent='flex-end'>
 
                   <Grid item xs={4}>
-                    <Button variant='outlined' onClick={() => console.log('Редактировать')}>Редактировать</Button>
+                    <Button variant='outlined' onClick={() => navigate('edit')}>Редактировать</Button>
                   </Grid>
 
                   <Grid item xs={4} sx={{mb: 3}}>

@@ -93,6 +93,17 @@ class Api {
         }).then(onResponse)
     }
 
+    editPost(postId, editedPost) {
+        return fetch(`${this._url}/posts/${postId}`, {
+            method: 'PATCH',
+            headers: {
+                authorization: `Bearer ${this._token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(editedPost),
+        }).then(onResponse);
+    }
+
     getPost(postId) {
         return fetch(`${this._url}/posts/${postId}`, {
             headers: {
