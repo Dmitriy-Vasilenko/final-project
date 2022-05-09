@@ -4,6 +4,7 @@ import { AppBar, Container, Toolbar, Typography, Box, Avatar, Chip, Stack } from
 import LogoutIcon from '@mui/icons-material/Logout';
 import UserContext from '../../contexts/userContext';
 import FormModalContext from '../../contexts/formModalContext';
+import PostsContext from '../../contexts/postsContext';
 import { Logo } from '../Logo';
 
 export const Header = ({page}) => {
@@ -11,12 +12,14 @@ export const Header = ({page}) => {
   const navigateToEditPage = () => {
     navigate('user/edit');
   }
-  const {user, setUser} = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const { setModalFormState } = useContext(FormModalContext);
+  const { setPosts } = useContext(PostsContext);
 
   const deleteUser = () => {
     localStorage.removeItem('token');
     setUser(null);
+    setPosts(null);
     setModalFormState(() => {
       return {
           isOpen: true,

@@ -93,7 +93,7 @@ class Api {
         }).then(onResponse)
     }
 
-    editPost(editedPost, postId) {
+    editPost(postId, editedPost) {
         return fetch(`${this._url}/posts/${postId}`, {
             method: 'PATCH',
             headers: {

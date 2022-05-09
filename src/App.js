@@ -34,16 +34,18 @@ export const App = () => {
   const [modalState, setModalState] = useState({
     isOpen: false,
     msg: null,
-});
+  });
   const [modalFormState, setModalFormState] = useState({
     isOpen: false,
     msg: null,
-});
+  });
 
   useEffect(() => {
     api.getUser()
     .then((user) => setUser(user))
-    .then(api.getPostsTotal().then(posts => setPostsTotal(posts)))
+    .then(api.getPostsTotal())
+    .then(posts => setPostsTotal(posts))
+    .catch(err => console.log(err))
   }, []);
 
   useEffect(() => {
@@ -65,7 +67,12 @@ export const App = () => {
           setPosts(post.posts)
           setQuantityPages(Math.ceil(post.total/12))
         })
-        .catch(err => alert(err))
+        .catch(() => setModalState(() => {
+          return {
+            isOpen: true,
+            msg: 'Возникла непредвиденная ошибка'
+          }
+        }))
       }
     }, [page, quantityPages, favorite, user, postsTotal, comments]); 
 
