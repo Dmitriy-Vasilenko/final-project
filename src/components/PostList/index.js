@@ -1,27 +1,39 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import PostsContext from '../../contexts/postsContext';
 import FavoriteContext from '../../contexts/favoriteContext';
 import { Post } from '../Post';
-import { Pagination, PaginationItem, Grid, Stack, Container } from '@mui/material';
+import { Pagination, PaginationItem, Grid, Stack, Container, Typography, Button } from '@mui/material';
 
 export const PostList = ({page, setPage, quantityPages}) => {
   const { favorite } = useContext(FavoriteContext);
   const { posts } = useContext(PostsContext);
+  const navigate = useNavigate();
 
   const handleChangePage = (event, pageNumber) => {
     setPage(pageNumber)
     localStorage.setItem('page', pageNumber)
   }
+
   
   return (
-    <Container component='main' maxWidth='lg' sx={{mt: 10}}>
+    <Container component='main' maxWidth='lg' sx={{mt: 5}}>
     <Grid 
       container 
       direction='column' 
       justifyContent='center'
       alignItems='center'
     >
+      <Grid container justifyContent='space-between' alignItems='center' sx={{mb: 5}}>
+        <Grid item>
+          <Typography variant='h4' gutterBottom>Добро пожаловать в наше приложение</Typography>
+          <Typography variant='h6' gutterBottom>Создай свой уникальный пост!</Typography>
+        </Grid>
+        <Grid item>
+          <Button variant="contained" onClick={() => navigate('post/create')}>Создать пост</Button>
+        </Grid>
+      </Grid>
       {
         posts && <Grid container spacing={3} sx={{mb: 4}}> 
         {posts.map((post) => (
