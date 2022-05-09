@@ -28,6 +28,10 @@ export const EditUser = () => {
         })
         .catch((err)=> alert(err));
     }
+
+    const handleOut = () =>{
+        navigate('/');
+    }
     useEffect(() => {
         if(user) {
             setUserName(user.name);
@@ -75,10 +79,13 @@ export const EditUser = () => {
                       }}
                   />
               
-              </Grid>
+              </Grid >
               <Grid item>
-                  <Button onClick ={handleClick}  variant='contained'  size='small'>
+                  <Button onClick ={handleClick}  variant='contained' sx={{marginRight: 2}}  size='small'>
                       Сохранить
+                  </Button>
+                  <Button onClick ={handleOut}  variant='contained'  size='small'>
+                      Отмена
                   </Button>
               </Grid>
           </Grid>
