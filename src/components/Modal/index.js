@@ -20,10 +20,6 @@ const style = {
 export default function CustomModal() {
     const { modalState, setModalState } = useContext(ModalContext);
 
-    const handleOpen = () =>
-        setModalState(() => {
-            return { isOpen: true, msg: 'YRA YRA' };
-        });
     const handleClose = () =>
         setModalState(() => {
             return { isOpen: false, msg: null };

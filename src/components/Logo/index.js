@@ -1,12 +1,12 @@
 import React from 'react';
-
 import { useNavigate } from 'react-router-dom';
-
-import { Button } from '@mui/material';
 
 import logo from '../../../public/assets/svg/logo.svg';
 
-export const Logo = ({setPage}) => {
+import { Button } from '@mui/material';
+
+
+export const Logo = ({ setPage }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {

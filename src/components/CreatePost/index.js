@@ -1,18 +1,17 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router';
 
-import { Button, FormControl, Grid, TextField, Typography } from '@mui/material';
-
 import PostsContext from '../../contexts/postsContext';
+import ModalContext from '../../contexts/modalContext';
 
 import { useApi } from '../../hooks/useApi';
 
-
-
+import { Button, FormControl, Grid, TextField, Typography } from '@mui/material';
 
 export const CreatePost = ({ page }) => {
   const navigate = useNavigate();
   const { setPostsTotal } = useContext(PostsContext);
+  const { setModalState } = useContext(ModalContext);
   const api = useApi();
   
 
@@ -29,9 +28,13 @@ export const CreatePost = ({ page }) => {
         setPostsTotal((prevState) => [...prevState, data]); 
         navigate(`/?page=${page}`);
     })
-    .catch((err) => alert(err.message));
-
-};
+    .catch(() => setModalState(() => {
+      return { 
+        isOpen: true, 
+        msg: 'Ошибка создания поста'
+      }
+    }));
+  };
 
   return (
     <Grid container maxWidth='75%'>
