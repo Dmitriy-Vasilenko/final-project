@@ -43,9 +43,8 @@ export const App = () => {
   useEffect(() => {
     api.getUser()
     .then((user) => setUser(user))
-    .then(api.getPostsTotal())
-    .then(posts => setPostsTotal(posts))
-    .catch(err => console.log(err))
+    .then(api.getPostsTotal().then(posts => setPostsTotal(posts)))
+    .catch(err => alert(err.message))
   }, []);
 
   useEffect(() => {
@@ -85,7 +84,7 @@ export const App = () => {
                 <div className='app'>
                   <Modal />
                   <FormModal />
-                <Header page={page}/>
+                <Header setPage={setPage}/>
                 <Routes>
                   <Route path='/' element={
                     <PostList 

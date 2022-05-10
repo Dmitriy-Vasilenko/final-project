@@ -1,13 +1,23 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+import { Button } from '@mui/material';
 
 import logo from '../../../public/assets/svg/logo.svg';
 
-export const Logo = ({page}) => {
+export const Logo = ({setPage}) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    localStorage.setItem('page', 1);
+    setPage(1)
+    navigate(`/?page=1`)
+  }
+
   return (
-    <Link to={`/?page=${page}`}>
+    <Button onClick={handleClick}>
       <img src={logo} height='45px' alt='logo'/>
-    </Link>
+    </Button>
   )
 }
