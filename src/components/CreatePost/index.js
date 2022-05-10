@@ -6,7 +6,6 @@ import { Button, FormControl, Grid, TextField, Typography } from '@mui/material'
 import PostsContext from '../../contexts/postsContext';
 
 import { useApi } from '../../hooks/useApi';
-import { SecurityUpdateGood } from '@mui/icons-material';
 
 
 
@@ -30,7 +29,7 @@ export const CreatePost = ({ page }) => {
         setPostsTotal((prevState) => [...prevState, data]); 
         navigate(`/?page=${page}`);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => alert(err.message));
 
 };
 

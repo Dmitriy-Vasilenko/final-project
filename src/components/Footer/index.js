@@ -1,5 +1,5 @@
-import { AppBar, Container, Typography } from '@mui/material';
 import React from 'react';
+import { AppBar, Container, Typography } from '@mui/material';
 
 export const Footer = () => {
   return (

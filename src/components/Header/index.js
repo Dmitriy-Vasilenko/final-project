@@ -7,7 +7,7 @@ import FormModalContext from '../../contexts/formModalContext';
 import PostsContext from '../../contexts/postsContext';
 import { Logo } from '../Logo';
 
-export const Header = ({page}) => {
+export const Header = ({setPage}) => {
   const navigate = useNavigate();
   const navigateToEditPage = () => {
     navigate('user/edit');
@@ -38,7 +38,7 @@ export const Header = ({page}) => {
             alignItems: 'center',
             gap: '10px'
           }}>
-            <Logo page={page}/>
+            <Logo setPage={setPage}/>
             <Typography>ADM Posts</Typography>
           </Box>
           <Box component='div' sx={{
