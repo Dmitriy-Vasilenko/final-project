@@ -14,6 +14,7 @@ export const Logo = ({ setPage }) => {
     setPage(1)
     navigate(`/?page=1`)
   }
+
   return (
     <Button onClick={handleClick}>
       <img src={logo} height='45px' alt='logo'/>

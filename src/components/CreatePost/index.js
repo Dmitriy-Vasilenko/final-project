@@ -34,8 +34,7 @@ export const CreatePost = ({ page }) => {
         msg: 'Ошибка создания поста'
       }
     }));
-
-};
+  };
 
   return (
     <Grid container maxWidth='75%'>

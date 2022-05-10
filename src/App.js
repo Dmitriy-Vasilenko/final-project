@@ -43,6 +43,7 @@ export const App = () => {
   useEffect(() => {
     api.getUser()
     .then((user) => setUser(user))
+
     .then(api.getPostsTotal().then(posts => {
       setPostsTotal(posts)
     }))
@@ -91,7 +92,9 @@ export const App = () => {
                 <div className='app'>
                   <Modal />
                   <FormModal />
+
                 <Header setPage={setPage} />
+                  
                 <Routes>
                   <Route path='/' element={
                     <PostList 
