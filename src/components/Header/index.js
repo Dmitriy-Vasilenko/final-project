@@ -18,6 +18,9 @@ export const Header = ({ setPage }) => {
 
   const deleteUser = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('page');
+    setPage(1);
+    navigate(`/?page=1`)
     setUser(null);
     setPosts(null);
     setModalFormState(() => {

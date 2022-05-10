@@ -1,4 +1,4 @@
-import React, { Children, useContext } from 'react';
+import React, { useContext } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
@@ -20,10 +20,6 @@ const style = {
 export default function CustomModal() {
     const { modalState, setModalState } = useContext(ModalContext);
 
-    const handleOpen = () =>
-        setModalState(() => {
-            return { isOpen: true, msg: 'YRA YRA' };
-        });
     const handleClose = () =>
         setModalState(() => {
             return { isOpen: false, msg: null };

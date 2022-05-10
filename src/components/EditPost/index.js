@@ -6,6 +6,7 @@ import ModalContext from '../../contexts/modalContext';
 import PostsContext from '../../contexts/postsContext';
 import { Grid, TextField, Typography, FormControl, Button } from '@mui/material';
 
+
 export const EditPost = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -25,7 +26,7 @@ export const EditPost = () => {
       image: image.trim(),
       title: title.trim(),
       text: text.trim(),
-      tags: tags.split(',').map(elem => elem.trim())
+      tags: tags
     }).then(data => {
       setPostsTotal(prevState => [...prevState])
       navigate(`/?page=${page}`)
@@ -95,7 +96,7 @@ export const EditPost = () => {
               name='inputTags' 
               type='text' 
               value={tags} 
-              onChange={({target}) => setTags(target.value)}
+              onChange={({target}) => setTags(target.value.split(',').map(elem => elem.trim()))}
             />
           </Grid>
           <Grid item display='flex' gap='10px' justifyContent='flex-end'>

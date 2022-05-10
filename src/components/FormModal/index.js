@@ -42,7 +42,6 @@ export const FormModal = () => {
     const signUp = () => {
         api.signUp({ email, password })
             .then((createdUser) => {
-                console.log({ createdUser });
                 return api.signIn({ email, password });
             })
             .then((signedInUser) => {
