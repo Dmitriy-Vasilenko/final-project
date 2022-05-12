@@ -14,7 +14,6 @@ export const CreatePost = ({ page }) => {
   const { setModalState } = useContext(ModalContext);
   const api = useApi();
   
-
   const handleSubmit = (event) => {
     event.preventDefault();
     const {target: {inputUrl, inputTitle, inputText, inputTags}} = event;
