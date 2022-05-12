@@ -8,14 +8,11 @@ import PostsContext from '../../contexts/postsContext';
 import { useApi } from '../../hooks/useApi';
 
 
-
-
 export const CreatePost = ({ page }) => {
   const navigate = useNavigate();
   const { setPostsTotal } = useContext(PostsContext);
   const api = useApi();
   
-
   const handleSubmit = (event) => {
     event.preventDefault();
     const {target: {inputUrl, inputTitle, inputText, inputTags}} = event;
@@ -31,7 +28,7 @@ export const CreatePost = ({ page }) => {
     })
     .catch((err) => alert(err.message));
 
-};
+  };
 
   return (
     <Grid container maxWidth='75%'>

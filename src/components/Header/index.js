@@ -22,8 +22,8 @@ export const Header = ({setPage}) => {
     setPosts(null);
     setModalFormState(() => {
       return {
-          isOpen: true,
-          msg: '',
+        isOpen: true,
+        msg: '',
       };
   });
   };
@@ -48,8 +48,8 @@ export const Header = ({setPage}) => {
           }}>
           </Box>
           <Stack direction="row" spacing={2}> 
-                      <Chip avatar={<Avatar alt="Natacha" src = {user?.avatar} />}  label={user?.name} onClick ={navigateToEditPage}  variant="outlined" />
-                      <Chip icon={<LogoutIcon />}  label='Выход' onClick={deleteUser}   variant="outlined" />
+            <Chip avatar={<Avatar alt="Natacha" src = {user?.avatar} />}  label={user?.name} onClick ={navigateToEditPage}  variant="outlined" />
+            <Chip icon={<LogoutIcon />}  label='Выход' onClick={deleteUser}   variant="outlined" />
           </Stack>
         </Toolbar>
       </Container>
