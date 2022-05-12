@@ -1,11 +1,15 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+
 import { useApi } from '../../hooks/useApi';
+
 import FavoriteContext from '../../contexts/favoriteContext';
 import UserContext from '../../contexts/userContext';
 import PostsContext from '../../contexts/postsContext';
 import ModalContext from '../../contexts/modalContext';
+
 import { Button, Grid, Paper, Card, CardHeader, CardContent, CardMedia, CardActions, Avatar, Typography, Box, IconButton, Badge, TextField } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -13,13 +17,17 @@ import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 
 export const PostCard = ({ comments, setComments, page }) => {
   const api = useApi();
+
   const params = useParams();
   const navigate = useNavigate();
+
   const { writeLS, removeLS } = useLocalStorage();
+
   const { favorite, setFavorite } = useContext(FavoriteContext);
-  const { postsTotal, setPostsTotal } = useContext(PostsContext);
+  const { setPostsTotal } = useContext(PostsContext);
   const { setModalState } = useContext(ModalContext);
   const { user } = useContext(UserContext);
+
   const [post, setPost] = useState(null);  
   const [showComments, setShowComments] = useState('none');
   const [badgeContent, setBadgeContent] = useState(null);
@@ -69,16 +77,16 @@ export const PostCard = ({ comments, setComments, page }) => {
   const deleteMyPost = () => {
     api.deletePost(post._id)
     .then(api.getPostsTotal()
-    .then(data => {
-      setPostsTotal(data)
-      setModalState(() => {
-        return {
-          isOpen: true, 
-          msg: 'Ваш пост удален'
-        }
-      })
-      navigate(`/?page=${page}`);
-    }))
+      .then(data => {
+        setPostsTotal(data)
+        setModalState(() => {
+          return {
+            isOpen: true, 
+            msg: 'Ваш пост удален'
+          }
+        })
+        navigate(`/?page=${page}`);
+      }))
   }
 
   const getPostComments = () => {

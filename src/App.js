@@ -43,8 +43,16 @@ export const App = () => {
   useEffect(() => {
     api.getUser()
     .then((user) => setUser(user))
-    .then(api.getPostsTotal().then(posts => setPostsTotal(posts)))
-    .catch(err => alert(err.message))
+
+    .then(api.getPostsTotal().then(posts => {
+      setPostsTotal(posts)
+    }))
+    .catch(() => setModalState(() => {
+      return {
+        isOpen: true,
+        msg: 'Возникла непредвиденная ошибка'
+      }
+    }))
   }, []);
 
   useEffect(() => {
@@ -59,21 +67,21 @@ export const App = () => {
     }
   }, []);
 
-    useEffect(() => {
-      if(user){
-        api.getPosts(page)
-        .then(post => {
-          setPosts(post.posts)
-          setQuantityPages(Math.ceil(post.total/12))
-        })
-        .catch(() => setModalState(() => {
-          return {
-            isOpen: true,
-            msg: 'Возникла непредвиденная ошибка'
-          }
-        }))
-      }
-    }, [page, quantityPages, favorite, user, postsTotal, comments]); 
+  useEffect(() => {
+    if(user){
+      api.getPosts(page)
+      .then(post => {
+        setPosts(post.posts)
+        setQuantityPages(Math.ceil(post.total/12))
+      })
+      .catch(() => setModalState(() => {
+        return {
+          isOpen: true,
+          msg: 'Возникла непредвиденная ошибка'
+        }
+      }))
+    }
+  }, [page, quantityPages, favorite, user, postsTotal, comments]); 
 
   return (
       <UserContext.Provider value={{user, setUser}}>
@@ -84,7 +92,9 @@ export const App = () => {
                 <div className='app'>
                   <Modal />
                   <FormModal />
-                <Header setPage={setPage}/>
+
+                <Header setPage={setPage} />
+                  
                 <Routes>
                   <Route path='/' element={
                     <PostList 
@@ -100,13 +110,9 @@ export const App = () => {
                       page={page}
                     />
                   }/>
-                  <Route path='post/:postId/edit' element={<EditPost />} />
-                  <Route path='user/edit' element={<EditUser />} />
-                  <Route path='post/create' element={
-                    <CreatePost 
-                      page={page} 
-                    />
-                  }/>
+                  <Route path='post/:postId/edit' element={ <EditPost /> } />
+                  <Route path='user/edit' element={ <EditUser /> } />
+                  <Route path='post/create' element={ <CreatePost page={page} /> }/>
                 </Routes>
                 <Footer/>
               </div>

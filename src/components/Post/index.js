@@ -10,13 +10,19 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import dayjs from 'dayjs';
 
+
 export const Post = ({ post, isItFavorite }) => {
   const api = useApi();
+
   const navigate = useNavigate();
+
   const { writeLS, removeLS } = useLocalStorage();
+
   const { setFavorite } = useContext(FavoriteContext);
   const { setModalState } = useContext(ModalContext);
+
   const [badgeContent, setBadgeContent] = useState(post.likes.length);
+
   const createdDate = dayjs(post.created_at).format('D MMMM YYYY');
 
   const arrayTags = post.tags.filter(tag => {
@@ -58,6 +64,7 @@ export const Post = ({ post, isItFavorite }) => {
   return (
     <Paper elevation={4} sx={{maxWidth: 400, height: 500}}>
       <Card sx={{ maxWidth: 400, height: '100%'}}>
+
         <CardHeader 
           sx={{display: 'flex', alignItems: 'flex-start'}}
           avatar={
@@ -84,27 +91,30 @@ export const Post = ({ post, isItFavorite }) => {
         />
 
         <CardContent>
+
           <Typography noWrap={true}>
             {post.title}
           </Typography>
+
           <Typography variant='body2' color='text.secondary' sx={{mb: 4, height: '40px', overflow: 'hidden', overflowWrap: 'break-word', textOverflow: 'ellipsis'}} align='justify'>
             {post.text}
           </Typography>
+
           <Stack direction='row' spacing={1}>
           {
-          arrayTags.map((tag, i) => {
-              return <Chip 
-                  key={i} 
-                  label={tag} 
-                  variant='outlined' 
-                  size='small' 
-                  color='primary'
-                  sx={{
-                  fontSize:'12px',
-                  borderRadius: '3px',
-                  }} 
-              />
-          })
+            arrayTags.map((tag, i) => {
+                return <Chip 
+                    key={i} 
+                    label={tag} 
+                    variant='outlined' 
+                    size='small' 
+                    color='primary'
+                    sx={{
+                    fontSize:'12px',
+                    borderRadius: '3px',
+                    }} 
+                />
+            })
           }
           </Stack>
         </CardContent>
@@ -126,15 +136,18 @@ export const Post = ({ post, isItFavorite }) => {
                 </IconButton>
             }
             
-            <IconButton aria-label='comments'>
-              <Badge badgeContent={post.comments.length} color='primary' showZero sx={{ml: 2}}>
-                <ChatOutlinedIcon color='secondary' />
-              </Badge>
-            </IconButton>
+              <IconButton aria-label='comments'>
+                <Badge badgeContent={post.comments.length} color='primary' showZero sx={{ml: 2}}>
+                  <ChatOutlinedIcon color='secondary' />
+                </Badge>
+              </IconButton>
+
             </Grid>
+
             <Grid item>
               <Button onClick={() => navigate(`post/${post._id}`)}>Читать</Button>
             </Grid>
+
           </Grid>
         </CardActions>          
       </Card>

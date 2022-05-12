@@ -1,9 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import{Grid, Typography, TextField, Button} from '@mui/material';
+
 import UserContext from '../../contexts/userContext';
+
 import { useApi } from '../../hooks/useApi';
+
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+
+import{Grid, Typography, TextField, Button} from '@mui/material';
+
 
 export const EditUser = () => {
     const navigate = useNavigate();
@@ -12,7 +17,7 @@ export const EditUser = () => {
     const api = useApi();
 
     const{user, setUser} = useContext(UserContext);
-    const[userName, setUserName] = useState("");
+    const[userName, setUserName] = useState('');
     const[userAbout, setUserAbout] = useState('');
     const [userAvatar, setUserAvatar] = useState('');
 

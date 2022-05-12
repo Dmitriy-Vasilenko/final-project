@@ -7,7 +7,7 @@ import FormModalContext from '../../contexts/formModalContext';
 import PostsContext from '../../contexts/postsContext';
 import { Logo } from '../Logo';
 
-export const Header = ({setPage}) => {
+export const Header = ({ setPage }) => {
   const navigate = useNavigate();
   const navigateToEditPage = () => {
     navigate('user/edit');
@@ -18,6 +18,9 @@ export const Header = ({setPage}) => {
 
   const deleteUser = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('page');
+    setPage(1);
+    navigate(`/?page=1`)
     setUser(null);
     setPosts(null);
     setModalFormState(() => {
@@ -38,7 +41,7 @@ export const Header = ({setPage}) => {
             alignItems: 'center',
             gap: '10px'
           }}>
-            <Logo setPage={setPage}/>
+            <Logo setPage={setPage} />
             <Typography>ADM Posts</Typography>
           </Box>
           <Box component='div' sx={{
